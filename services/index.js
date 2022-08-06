@@ -1,13 +1,9 @@
-const BookingsDataSource = require('../datasources/bookings');
-const ReviewsDataSource = require('../datasources/reviews');
-const ListingsAPI = require('../datasources/listings');
-const AccountsAPI = require('../datasources/accounts');
-const PaymentsAPI = require('../datasources/payments');
+const BookingsDataSource = require("../datasources/bookings");
+const ReviewsDataSource = require("../datasources/reviews");
+const ListingsAPI = require("../datasources/listings");
 
 module.exports = {
   BookingsDataSource,
   ReviewsDataSource,
   ListingsAPI,
-  AccountsAPI,
-  PaymentsAPI,
 };

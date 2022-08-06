@@ -1,21 +1,23 @@
-const { ApolloServer, gql } = require('apollo-server');
-const { buildSubgraphSchema } = require('@apollo/subgraph');
+const { ApolloServer, gql } = require("apollo-server");
+const { buildSubgraphSchema } = require("@apollo/subgraph");
 
-const { readFileSync } = require('fs');
+const { readFileSync } = require("fs");
 
-const typeDefs = gql(readFileSync('./schema.graphql', { encoding: 'utf-8' }));
-const resolvers = require('./resolvers');
-const { BookingsDataSource, ReviewsDataSource, ListingsAPI, AccountsAPI, PaymentsAPI } = require('./services');
+const typeDefs = gql(readFileSync("./schema.graphql", { encoding: "utf-8" }));
+const resolvers = require("./resolvers");
+const {
+  BookingsDataSource,
+  ReviewsDataSource,
+  ListingsAPI,
+} = require("./services");
 
 const server = new ApolloServer({
   schema: buildSubgraphSchema({ typeDefs, resolvers }),
   dataSources: () => {
     return {
-      accountsAPI: new AccountsAPI(),
       bookingsDb: new BookingsDataSource(),
       reviewsDb: new ReviewsDataSource(),
       listingsAPI: new ListingsAPI(),
-      paymentsAPI: new PaymentsAPI(),
     };
   },
   context: ({ req }) => {
