@@ -1,3 +1,7 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/federation/v2.0",
+        import: ["@key", "@shareable"])
+
 type Query {
 
   ### Listings
@@ -26,8 +30,6 @@ type Query {
 }
 
 type Mutation {
-
-
   ### Listings
   "Creates a new listing for the currently authenticated host"
   createListing(listing: CreateListingInput!): CreateListingResponse!
@@ -36,16 +38,6 @@ type Mutation {
 
   ### Bookings
   createBooking(createBookingInput: CreateBookingInput): CreateBookingResponse!
-
-  ### Reviews
-  "Creates reviews for both host and listing for a particular booking - must be authored by guest of past booking"
-  submitHostAndLocationReviews(
-    bookingId: ID!
-    hostReview: ReviewInput!
-    locationReview: ReviewInput!
-  ): SubmitHostAndLocationReviewsResponse!
-  "Creates a review for the guest - must be authored by host of past booking"
-  submitGuestReview(bookingId: ID!, guestReview: ReviewInput!): SubmitGuestReviewResponse!
   
 }
 
@@ -59,7 +51,6 @@ interface MutationResponse {
 }
 
 #### User accounts
-
 "Represents an Airlock user's common properties"
 interface User {
   id: ID!
@@ -80,7 +71,7 @@ type Guest implements User @key(fields: "id") {
 ### Listings
 
 "A listing is a location owned by a host. A listing has a list of amenities it offers. Listings have a fixed cost per night value."
-type Listing {
+type Listing @key(fields: "id") {
   id: ID!
   "The listing's title"
   title: String!
@@ -104,8 +95,6 @@ type Listing {
   numberOfUpcomingBookings: Int!
   "An array of upcoming reserved dates that the listing has been booked for"
   currentlyBookedDates: [ReservedDate]!
-  "The submitted reviews for this listing"
-  reviews: [Review]!
   "The overall calculated rating for a listing"
   overallRating: Float
   "Calculated total cost of the listing with the given arguments"
@@ -227,7 +216,7 @@ type UpdateListingResponse implements MutationResponse {
 ### Bookings
 
 "A booking is a reservation for a specific listing"
-type Booking {
+type Booking @key(fields: "id"){
   id: ID!
   "The listing associated with the reservation"
   listing: Listing!
@@ -241,12 +230,6 @@ type Booking {
   totalPrice: Float!
   "The status of the booking - check BookingStatus type for all possibilities"
   status: BookingStatus!
-  "The guest's review of the location"
-  locationReview: Review
-  "The guest's review about the host"
-  hostReview: Review
-  "The host's review about the guest"
-  guestReview: Review
 }
 
 "The status of a booking"
@@ -288,7 +271,7 @@ type CreateBookingResponse implements MutationResponse {
 ### Reviews
 
 "A review consists of a numerical rating and written text. It can be written by a host or a guest."
-type Review {
+type Review @shareable{
   id: ID!
   "Written comment the author has written about the review target"
   text: String!
@@ -304,33 +287,8 @@ input ReviewInput {
   rating: Float!
 }
 
-"The response after submitting reviews for both host and location together."
-type SubmitHostAndLocationReviewsResponse implements MutationResponse {
-  "Similar to HTTP status code, represents the status of the mutation"
-  code: Int!
-  "Indicates whether the mutation was successful"
-  success: Boolean!
-  "Human-readable message for the UI"
-  message: String!
-  "Newly created review about the host"
-  hostReview: Review
-  "Newly created review about the location"
-  locationReview: Review
-}
 
-"The response after submitting reviews for a guest."
-type SubmitGuestReviewResponse implements MutationResponse {
-  "Similar to HTTP status code, represents the status of the mutation"
-  code: Int!
-  "Indicates whether the mutation was successful"
-  success: Boolean!
-  "Human-readable message for the UI"
-  message: String!
-  "Newly created review about the guest"
-  guestReview: Review
-}
-extend schema
-  @link(url: "https://specs.apollo.dev/federation/v2.0",
-        import: ["@key"])
+
+
 
 
