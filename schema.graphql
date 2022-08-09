@@ -268,25 +268,6 @@ type CreateBookingResponse implements MutationResponse {
   booking: NewBookingResponse
 }
 
-### Reviews
-
-"A review consists of a numerical rating and written text. It can be written by a host or a guest."
-type Review @shareable{
-  id: ID!
-  "Written comment the author has written about the review target"
-  text: String!
-  "User that wrote the review"
-  author: User!
-  "The numerical rating for the review target, on a scale of 1-5, with 5 being excellent."
-  rating: Float!
-}
-
-"ReviewInput is the bare minimum needed to submit a review, not tied to any target."
-input ReviewInput {
-  text: String!
-  rating: Float!
-}
-
 
 
 
