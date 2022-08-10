@@ -131,12 +131,6 @@ const resolvers = {
       }
     },
   },
-
-  Host: {
-    overallRating: ({ id }, _, { dataSources }) => {
-      return dataSources.reviewsDb.getOverallRatingForHost(id);
-    },
-  },
   Listing: {
     __resolveReference(listing, { dataSources }) {
       return dataSources.listingsAPI.getListing(listing.id);
@@ -168,17 +162,6 @@ const resolvers = {
         (await dataSources.bookingsDb.getBookingsForListing(id, "UPCOMING")) ||
         [];
       return bookings.length;
-    },
-  },
-  Review: {
-    author: (review) => {
-      let role = "";
-      if (review.targetType === "LISTING" || review.targetType === "HOST") {
-        role = "Guest";
-      } else {
-        role = "Host";
-      }
-      return { __typename: role, id: review.authorId };
     },
   },
   AmenityCategory: {

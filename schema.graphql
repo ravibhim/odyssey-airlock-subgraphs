@@ -1,6 +1,6 @@
 extend schema
   @link(url: "https://specs.apollo.dev/federation/v2.0",
-        import: ["@key", "@shareable"])
+        import: ["@key"])
 
 type Query {
 
@@ -46,8 +46,6 @@ interface User {
 "A host is a type of Airlock user. They own listings."
 type Host implements User @key(fields: "id") {
   id: ID!
-  "The overall calculated rating for the host"
-  overallRating: Float
 }
 
 "A guest is a type of Airlock user. They book places to stay."

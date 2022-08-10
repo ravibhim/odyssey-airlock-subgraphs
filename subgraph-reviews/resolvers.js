@@ -84,6 +84,12 @@ const resolvers = {
       };
     },
   },
+
+  Host: {
+    overallRating: ({ id }, _, { dataSources }) => {
+      return dataSources.reviewsDb.getOverallRatingForHost(id);
+    },
+  },
   Listing: {
     reviews: ({ id }, _, { dataSources }) => {
       return dataSources.reviewsDb.getReviewsForListing(id);

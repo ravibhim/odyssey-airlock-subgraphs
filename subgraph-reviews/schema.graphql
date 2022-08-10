@@ -1,6 +1,6 @@
 extend schema
   @link(url: "https://specs.apollo.dev/federation/v2.0",
-        import: ["@key", "@shareable"])
+        import: ["@key"])
 
 type Mutation{
   "Creates a review for the guest - must be authored by host of past booking"
@@ -40,7 +40,7 @@ type Booking @key(fields: "id") {
 }
 
 "A review consists of a numerical rating and written text. It can be written by a host or a guest."
-type Review @shareable {
+type Review {
   id: ID!
   "Written comment the author has written about the review target"
   text: String!
@@ -58,6 +58,8 @@ interface User {
 "A host is a type of Airlock user. They own listings."
 type Host implements User @key(fields: "id") {
   id: ID!
+  "The overall calculated rating for the host"
+  overallRating: Float
 }
 
 "A guest is a type of Airlock user. They book places to stay."
